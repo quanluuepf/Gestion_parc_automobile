@@ -5,6 +5,9 @@ from .vehicles import VehicleListWindow
 from .employees import EmployeeListWindow
 from .reservations import ReservationWindow
 from .returns import ReturnWindow
+from .maintenance import MaintenanceWindow
+from .fuel import FuelWindow
+from .alerts import AlertsWindow
 
 
 STATUS_COLORS = {
@@ -80,6 +83,9 @@ class DashboardApp:
         ttk.Button(actions, text='Gestion Employés', width=20, command=self.open_employees).pack(side='left', padx=5)
         ttk.Button(actions, text='Nouvelle Réservation', width=20, command=self.open_reservations).pack(side='left', padx=5)
         ttk.Button(actions, text='Retour Véhicule', width=20, command=self.open_returns).pack(side='left', padx=5)
+        ttk.Button(actions, text='Enregistrement Maintenance', width=22, command=self.open_maintenance).pack(side='left', padx=5)
+        ttk.Button(actions, text='Ravitaillement Carburant', width=22, command=self.open_fuel).pack(side='left', padx=5)
+        ttk.Button(actions, text='Alertes / Échéances', width=20, command=self.open_alerts).pack(side='left', padx=5)
 
         # ================= VEHICLE LIST =================
         tree_frame = ttk.LabelFrame(self.root, text='Véhicules', padding=10)
@@ -159,6 +165,15 @@ class DashboardApp:
 
     def open_returns(self):
         ReturnWindow(self.root)
+
+    def open_maintenance(self):
+        MaintenanceWindow(self.root)
+
+    def open_fuel(self):
+        FuelWindow(self.root)
+
+    def open_alerts(self):
+        AlertsWindow(self.root)
 
     # ======================================================
     # RUN

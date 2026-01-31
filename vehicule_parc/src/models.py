@@ -5,11 +5,11 @@ def add_vehicle(data):
     c = conn.cursor()
     c.execute('''INSERT INTO vehicules (
         immatriculation, marque, modele, type_vehicule, annee, date_acquisition,
-        kilometrage_actuel, carburant, puissance_fiscale, numero_chassis, photo_path,
+        kilometrage_initial, kilometrage_actuel, carburant, puissance_fiscale, numero_chassis, photo_path,
         type_affectation, statut, service_principal, seuil_revision_km
-    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', (
+    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', (
         data.get('immatriculation'), data.get('marque'), data.get('modele'), data.get('type_vehicule'),
-        data.get('annee'), data.get('date_acquisition'), data.get('kilometrage_actuel',0), data.get('carburant'),
+        data.get('annee'), data.get('date_acquisition'), data.get('kilometrage_initial',0), data.get('kilometrage_actuel',0), data.get('carburant'),
         data.get('puissance_fiscale'), data.get('numero_chassis'), data.get('photo_path'), data.get('type_affectation'),
         data.get('statut','disponible'), data.get('service_principal'), data.get('seuil_revision_km')
     ))

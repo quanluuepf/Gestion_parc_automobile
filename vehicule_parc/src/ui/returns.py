@@ -221,14 +221,16 @@ class ReturnWindow:
         c = conn.cursor()
 
         # Get full rental details
-        c.execute('''SELECT sr.id, sr.vehicule_id, sr.employe_id, sr.motif, sr.date_sortie_reelle,
-                            sr.heure_sortie_reelle, sr.km_depart, sr.destination,
+        c.execute('''SELECT sr.id, sr.vehicule_id, sr.employe_id, sr.motif, 
+                            COALESCE(sr.date_sortie_reelle, sr.date_sortie_prevue) as date_out,
+                            COALESCE(sr.heure_sortie_reelle, sr.heure_sortie_prevue) as time_out,
+                            sr.km_depart, sr.destination,
                             v.immatriculation, v.marque, v.modele, e.nom, e.prenom
                      FROM sorties_reservations sr
                      JOIN vehicules v ON sr.vehicule_id = v.id
                      JOIN employes e ON sr.employe_id = e.id
                      WHERE v.immatriculation = ? AND sr.statut IN ('en sortie', 'réservée')
-                     ORDER BY sr.date_sortie_reelle DESC LIMIT 1''', (immat,))
+                     ORDER BY sr.date_sortie_prevue DESC LIMIT 1''', (immat,))
 
         rental = c.fetchone()
         conn.close()
@@ -353,6 +355,7 @@ class ReturnWindow:
             now = datetime.now()
             km_retour = int(self.km_retour_var.get())
             
+            print(f"DEBUG: Updating rental {self.selected_return['id']}")
             c.execute('''UPDATE sorties_reservations 
                         SET date_retour_reelle = ?,
                             heure_retour_reelle = ?,
@@ -366,9 +369,11 @@ class ReturnWindow:
                 km_retour,
                 self.condition_var.get(),
                 self.fuel_var.get(),
-                'clôturée'
-            ), self.selected_return['id'])
+                'clôturée',
+                self.selected_return['id']
+            ))
 
+            print(f"DEBUG: Updating vehicle {self.selected_return['vehicle_id']}")
             # Update vehicle mileage and status
             c.execute('''UPDATE vehicules 
                         SET kilometrage_actuel = ?,
@@ -380,6 +385,7 @@ class ReturnWindow:
             ))
 
             conn.commit()
+            print(f"DEBUG: Commit successful")
             conn.close()
 
             messagebox.showinfo('Succès', 
@@ -390,4 +396,7 @@ class ReturnWindow:
             self.selected_return = None
             
         except Exception as e:
+            print(f"DEBUG: Exception caught: {type(e).__name__}: {str(e)}")
+            import traceback
+            traceback.print_exc()
             messagebox.showerror('Erreur', f'Erreur lors de la clôture: {str(e)}')

@@ -47,6 +47,7 @@ def init_db():
         type_vehicule TEXT,
         annee INTEGER,
         date_acquisition TEXT,
+        kilometrage_initial INTEGER DEFAULT 0,
         kilometrage_actuel INTEGER DEFAULT 0,
         carburant TEXT,
         puissance_fiscale TEXT,

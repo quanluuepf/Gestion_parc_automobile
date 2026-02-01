@@ -8,6 +8,7 @@ from .returns import ReturnWindow
 from .maintenance import MaintenanceWindow
 from .fuel import FuelWindow
 from .alerts import AlertsWindow
+from .statistics import StatisticsWindow
 
 
 STATUS_COLORS = {
@@ -86,6 +87,7 @@ class DashboardApp:
         ttk.Button(actions, text='Enregistrement Maintenance', width=22, command=self.open_maintenance).pack(side='left', padx=5)
         ttk.Button(actions, text='Ravitaillement Carburant', width=22, command=self.open_fuel).pack(side='left', padx=5)
         ttk.Button(actions, text='Alertes / Échéances', width=20, command=self.open_alerts).pack(side='left', padx=5)
+        ttk.Button(actions, text='Statistiques & Rapports', width=22, command=self.open_statistics).pack(side='left', padx=5)
 
         # ================= VEHICLE LIST =================
         tree_frame = ttk.LabelFrame(self.root, text='Véhicules', padding=10)
@@ -174,6 +176,9 @@ class DashboardApp:
 
     def open_alerts(self):
         AlertsWindow(self.root)
+
+    def open_statistics(self):
+        StatisticsWindow(self.root)
 
     # ======================================================
     # RUN
